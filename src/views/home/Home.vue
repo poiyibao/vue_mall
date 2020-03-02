@@ -3,11 +3,19 @@
     <nav-bar class="home-nav">
       <div slot="center">易购女装</div>
     </nav-bar>
-    <Scroll class="scroll" ref="scroll" :probe-type="3" @scroll="contentScroll">
-    <home-swiper :banners="banners"/>
+    <tab-control ref="copyTabControl"
+                 class="tab-control"
+                 v-show="isTabControlfixed"
+                 :titles="['流行','新品','精选']"
+                 @tabClick="tabClick"></tab-control>
+    <Scroll class="scroll" ref="scroll"
+            :probe-type="3" @scroll="contentScroll"
+            :pull-up-load="true" @pullingUp="loadMore">
+    <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad" />
     <recommend-view :recommends="recommends"/>
     <fashion></fashion>
-    <tab-control class="tab-control" :titles="['流行','新品','精选']"
+    <tab-control ref="tabControl"
+                 :titles="['流行','新品','精选']"
                  @tabClick="tabClick"></tab-control>
     <goods-list :goods="goods[selectType].list"></goods-list>
     </Scroll>
@@ -64,19 +72,47 @@
           },
           },
         selectType:'pop',
-        isShow: false
+        isShow: false,
+        tabOffsetTop: 0,
+        isTabControlfixed: false,
+        saveY:0
+
 
       }
     },
     created() {
       // 1.请求多个导航分类数据
-      this.getHomeMultidata()
+      this.getHomeMultidata();
       //2.请求商品数据
-      this.getHomeGoods('pop')
-      this.getHomeGoods('new')
-      this.getHomeGoods('sell')
+      this.getHomeGoods('pop');
+      this.getHomeGoods('new');
+      this.getHomeGoods('sell');
       //console.log(this.goods['pop']);
+
     },
+    mounted() {
+      // 图片加载完成监听
+      const refresh = this.debounce(this.$refs.scroll.scroll.refresh,100);
+
+      this.$bus.$on('itemImgeLoad',() =>{
+        refresh()
+      });
+      //tabcontrol的offsetTop获取
+      //tabcontrol为组件，通过$el:属性获取组件中元素
+
+    },
+
+    activated() {
+      //return console.log('activated');
+      //this.$refs.scroll.scroll.scrollTo(0,this.saveY,0)
+       this.$refs.scroll.scroll.scrollTo(0,this.saveY,0)
+      this.$refs.scroll.scroll.refresh()
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.scroll.y;
+      // return console.log('deactivated');
+    },
+
     methods: {
       /*
       *网络请求方法
@@ -91,8 +127,9 @@
       getHomeGoods(type){
         const page = this.goods[type].page+1;
         getHomeGoods(type, page).then(res =>{
-          this.goods[type].list .push(...res.data.list )
-          this.goods[type].page += 1
+          this.goods[type].list .push(...res.data.list );
+          this.goods[type].page += 1;
+          this.$refs.scroll.scroll.finishPullUp()
         })
       },
       /*
@@ -111,39 +148,84 @@
             break
 
         }
+        this.$refs.copyTabControl.currentIndex = index;
+        this.$refs.tabControl.currentIndex = index;
       },
+      /*
+      * 返回顶端事件
+      * */
       backClick() {
         this.$refs.scroll.scroll.scrollTo(0,0,900)
       },
+      /*
+      * 判断返回顶端按钮的显示隐藏
+      * */
       contentScroll(position) {
         //console.log(position);
-        this.isShow = position.y < (-1000)
+        //backTap是否显示
+        this.isShow = position.y < (-1000);
+        //controlbar是否吸顶
+        this.isTabControlfixed = (-position.y) >= this.tabOffsetTop
+
+
       },
+      /*
+      * 上拉加载更多
+      * */
+      loadMore (){
+        //console.log('shangla');
+        this.getHomeGoods(this.selectType)
+      },
+      /*
+      *防抖监听
+      * */
+      debounce(func,delay) {
+        let timer = null;
+        return function (...args) {
+          if(timer) {
+            clearTimeout(timer)}
+          else {
+            timer = setTimeout(() =>{
+              func.apply(this,args)
+            },delay)
+          }
+        }
+
+      },
+      /*
+      * 轮播图片加载完成监听
+      * */
+      swiperImageLoad (){
+        this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop;
+        //console.log(this.$refs.tabControl.$el.offsetTop);
+      },
+
     }
   }
 </script>
 
 <style scoped>
   #home {
-    margin-top: 44px;
+    //margin-top: 44px;
     height: 100vh;
     //padding-top: 44px;
   }
   .home-nav {
     background-color: var(--color-tint);
     color: #fff;
-
+    /*
     position: fixed;
     left: 0;
     right: 0;
     top: 0;
     z-index: 999;
+     */
   }
   .tab-control {
-    position: sticky;
-    top: 44px;
+    position: relative;
     z-index: 99;
   }
+
   .scroll {
   //height: 300px;
   overflow: hidden;
@@ -153,4 +235,5 @@
     right: 0;
     left: 0;
   }
+
 </style>
