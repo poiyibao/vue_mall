@@ -35,7 +35,7 @@
 //import GoodsList from "../../components/content/goods/GoodsList";
 
   import {getHomeMultidata, getHomeGoods} from "network/home";
-
+  import {debounce} from "common/utils";
   import Scroll from "components/common/scroll/Scroll";
 
 
@@ -92,9 +92,9 @@
     },
     mounted() {
       // 图片加载完成监听
-      const refresh = this.debounce(this.$refs.scroll.scroll.refresh,100);
+      const refresh = debounce(this.$refs.scroll.scroll.refresh,100);
 
-      this.$bus.$on('itemImgeLoad',() =>{
+      this.$bus.$on('homeItemImgeLoad',() =>{
         refresh()
       });
       //tabcontrol的offsetTop获取
@@ -179,19 +179,6 @@
       /*
       *防抖监听
       * */
-      debounce(func,delay) {
-        let timer = null;
-        return function (...args) {
-          if(timer) {
-            clearTimeout(timer)}
-          else {
-            timer = setTimeout(() =>{
-              func.apply(this,args)
-            },delay)
-          }
-        }
-
-      },
       /*
       * 轮播图片加载完成监听
       * */

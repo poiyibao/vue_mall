@@ -22,3 +22,8 @@ export class Goods {
     }
 
 }
+export function getRecommend() {
+    return request({
+        url: '/recommend'
+    })
+}
