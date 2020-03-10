@@ -92,10 +92,10 @@
     },
     mounted() {
       // 图片加载完成监听
-      const refresh = debounce(this.$refs.scroll.scroll.refresh,100);
+      let newRefresh = debounce(this.$refs.scroll.scroll.refresh,100);
 
       this.$bus.$on('homeItemImgeLoad',() =>{
-        refresh()
+        newRefresh()
       });
       //tabcontrol的offsetTop获取
       //tabcontrol为组件，通过$el:属性获取组件中元素

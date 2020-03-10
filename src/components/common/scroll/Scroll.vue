@@ -41,6 +41,18 @@
             this.scroll.on('pullingUp', () =>{
                 this.$emit('pullingUp')
             })
+        },
+        methods: {
+            finishPullUp() {
+                this.scroll && this.scroll.finishPullUp && this.scroll.finishPullUp()
+            },
+            scrollTo(x,y,time = 300) {
+                this.scroll && this.scroll.sscrollTo(x,y,time)
+            },
+            refresh() {
+               // console.log("---");
+                this.scroll && this.scroll.refresh()
+            }
         }
     }
 </script>

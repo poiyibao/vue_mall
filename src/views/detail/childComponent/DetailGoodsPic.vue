@@ -8,7 +8,7 @@
         <div v-for="(item,index) in goodsPic.detailImage" :key="index">
             <div class="info-key">{{item.key}}</div>
             <div class="info-list">
-                <img v-for="(item,index) in goodsPic.detailImage[0].list" :key="index" :src="item"  alt="">
+                <img v-for="(item,index) in goodsPic.detailImage[0].list" :key="index" :src="item"  @load="imgLoad" alt="">
             </div>
         </div>
     </div>
@@ -23,16 +23,15 @@
                 default(){
                     return {}
                 }
+            },
+        },
+
+        methods: {
+            imgLoad() {
+               this.$emit('imgLoad')
             }
         },
         /*
-        methods: {
-            imgLoad() {
-                if(++this.counter === this.imageslength) {
-                   this.$emit('imaheLoad')
-                }
-            }
-        },
         watch: {
             detailInfo() {
                 this.imagesLength = this.goodsPic.detailImage[0].list.length
