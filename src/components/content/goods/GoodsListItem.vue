@@ -27,12 +27,16 @@
         },
         methods: {
             imgLoad () {
+                this.$bus.$emit('itemImgLoad')
+                /*
                 if(this.$route.path.indexOf('/home')){
                     this.$bus.$emit('homeItemImgeLoad')
                 }
                 else if (this.$route.path.indexOf('/detail')){
                     this.$bus.$emit('detailItemImgeLoad')
                 }
+
+                 */
             },
             itemClick() {
                 this.$router.push('/detail/' + this.goodsItem.iid)

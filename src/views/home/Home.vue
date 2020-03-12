@@ -35,9 +35,8 @@
 //import GoodsList from "../../components/content/goods/GoodsList";
 
   import {getHomeMultidata, getHomeGoods} from "network/home";
-  import {debounce} from "common/utils";
   import Scroll from "components/common/scroll/Scroll";
-
+  import {itemListenerMixin} from "common/mixin";
 
   export default {
     name: "Home",
@@ -51,6 +50,7 @@
       Scroll,
       backTop
     },
+    mixins:[itemListenerMixin],
     data() {
       return {
         banners: [],
@@ -75,9 +75,7 @@
         isShow: false,
         tabOffsetTop: 0,
         isTabControlfixed: false,
-        saveY:0
-
-
+        saveY:0,
       }
     },
     created() {
@@ -92,11 +90,6 @@
     },
     mounted() {
       // 图片加载完成监听
-      let newRefresh = debounce(this.$refs.scroll.scroll.refresh,100);
-
-      this.$bus.$on('homeItemImgeLoad',() =>{
-        newRefresh()
-      });
       //tabcontrol的offsetTop获取
       //tabcontrol为组件，通过$el:属性获取组件中元素
 
@@ -106,10 +99,12 @@
       //return console.log('activated');
       //this.$refs.scroll.scroll.scrollTo(0,this.saveY,0)
        this.$refs.scroll.scroll.scrollTo(0,this.saveY,0)
-      this.$refs.scroll.scroll.refresh()
+        this.$refs.scroll.refresh()
     },
     deactivated() {
       this.saveY = this.$refs.scroll.scroll.y;
+      //取消全局事件监听
+      this.$bus.$off('itemImgLoad',this.itemImgListener)
       // return console.log('deactivated');
     },
 

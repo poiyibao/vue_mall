@@ -24,8 +24,10 @@
     import DetailComment from "./childComponent/DetailComment";
 
     import GoodsList from "components/content/goods/GoodsList";
-    import {debounce} from "common/utils";
     import Scroll from "components/common/scroll/Scroll";
+    import { itemListenerMixin} from "common/mixin";
+    import {debounce} from "../../common/utils";
+
     export default {
         name: "Detail",
         props: {
@@ -42,6 +44,7 @@
             Scroll,
             GoodsList
         },
+        mixins: [itemListenerMixin],
         data() {
             return {
                 iid: null,
@@ -53,34 +56,13 @@
                 itemParams: {},
                 comment: {},
                 tops:[],
-                newRefresh: null,
-                //getTops: null,
+                //newRefresh: null,
+                getTops: null,
 
             }
         },
         mounted() {
-            const refresh = debounce(this.$refs.scroll.refresh,100);
-            this.newRefresh = debounce(this.$refs.scroll.refresh,100);
-            this.$bus.$on(  'detailItemImgeLoad',() =>{
-                refresh();
-            });
-        },
-        methods: {
-            imgLoad() {
-                //console.log("---");
-                this.newRefresh();
-                //this.getTops();
-                this.tops = [];
-                this.tops.push(0);
-                this.tops.push(this.$refs.params.$el.offsetTop);
-                this.tops.push(this.$refs.comments.$el.offsetTop);
-                this.tops.push(this.$refs.recommend.$el.offsetTop);
-                //console.log(this.tops);
 
-            },
-            titleClick(index){
-                this.$refs.scroll.scroll.scrollTo(0,44-this.tops[index],500)
-            },
         },
         created() {
             this.iid = this.$route.params.iid;
@@ -107,7 +89,32 @@
                 this.recommends = res.data.list
             });
             //详情页图片加载完监听
+            this.getTops = debounce(() => {
+                this.tops = [];
+                this.tops.push(0);
+                this.tops.push(this.$refs.params.$el.offsetTop);
+                this.tops.push(this.$refs.comments.$el.offsetTop);
+                this.tops.push(this.$refs.recommend.$el.offsetTop);
+                console.log(this.tops);
+            },100)
+        },
+        destroyed() {
+            //取消全局事件监听
+            this.$bus.$off("itemImgeLoad", this.itemImgListener);
+        },
+        methods: {
+            imgLoad() {
+                console.log("---");
+                this.$refs.scroll.refresh();
+                //his.newRefresh();
+                this.$nextTick(() => {
+                    this.getTops()
+                });
 
+            },
+            titleClick(index){
+                this.$refs.scroll.scroll.scrollTo(0,44-this.tops[index],500)
+            },
         },
     }
 </script>

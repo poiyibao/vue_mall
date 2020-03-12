@@ -1,65 +1,84 @@
 <template>
-    <div class="param-info" v-if="Object(itemParams).length !== 0">
-        <table class="info-size"
-               v-for="(table,index) in itemParams.rule.tables" :key="index">
-            <tr v-for="(tr,indey) in table" :key="indey">
-                <td v-for="(td,indez) in tr" :key="indez">
-                    {{td}}
-                </td>
-            </tr>
-        </table>
-        <table class="info-param">
-            <tr v-for="(info,index) in itemParams.info.set" :key="index">
-                <td class="info-param-key">{{info.key}}</td>
-                <td class="param-value">{{info.value}}</td>
-            </tr>
-        </table>
-        <div class="info-img" v-if="itemParams.info.image">
-            <img :src="itemParams.info.images[0]" alt="">
+    <div class="item-param">
+        <div class="size-info" v-if="itemParams.rule">
+            <p class="title">{{itemParams.rule.key}}</p>
+            <table v-for="(item,index) in itemParams.rule.tables" :key="index">
+                <tr v-for="(tr,index) in item" :key="index">
+                    <td v-for="(td,index) in tr" :key="index">{{td}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="product-info" v-if="itemParams.info">
+            <p class="title">{{itemParams.info.key}}</p>
+            <table>
+                <tr v-for="(item,index) in itemParams.info.set" :key="index">
+                    <td class="min-title">{{item.key}}</td>
+                    <td class="content">{{item.value}}</td>
+                </tr>
+            </table>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "DetailItemParams",
+        name: "DetailItemParam",
         props: {
-            itemParams : {
-                type:Object,
+            itemParams: {
+                type: Object,
                 default() {
-                    return {}
+                    return {};
                 }
             }
-        },
-    }
+        }
+    };
 </script>
-
 <style scoped>
-    .param-info {
-        padding: 20px 15px;
-        font-size: 14px;
-        border-bottom: 5px solid #f2f5f8;
+    .item-param {
+        padding: 16px 10px 30px;
+        border-top: 5px solid #eee;
+        transform: translateZ(0);
+        box-sizing: border-box;
+        background-color: #fff;
     }
-    .param-info table {
+
+    .size-info p,
+    .product-info p {
+        padding-bottom: 8px;
+        border-bottom: 0.2px solid #666;
+        color: #333;
+    }
+
+    .size-info table {
         width: 100%;
-        border-collapse: collapse;
     }
-    .param-info table tr {
-        height: 42px;
+
+    .size-info td {
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+        font-size: 12px;
     }
-    .param-info table tr td {
-        border-bottom: 1px solid rgba(100,100,100,0.1);
+
+    .product-info table {
+        width: 100%;
     }
-    .info-param-key {
-        width: 40%;
+
+    .product-info p {
+        margin-top: 20px;
     }
-    .info-param {
-        border-top: 1px solid rgba(0,0,0,0.1);
+
+    .product-info td {
+        font-size: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
     }
-    .param-value {
-        color: #eb4868;
+
+    .product-info .min-title {
+        width: 80px;
     }
-    .info-img img {
-        width: 100$;
+
+    .product-info .content {
+        color: red;
+        font-size: 12px;
     }
 </style>
