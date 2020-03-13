@@ -1,7 +1,7 @@
 <template>
     <div id="detail">
-        <detail-nav-bar class="datilNav" @titleClick="titleClick"></detail-nav-bar>
-        <scroll class="content" ref="scroll">
+        <detail-nav-bar class="datilNav" @titleClick="titleClick" ref="navIndex"></detail-nav-bar>
+        <scroll class="content" ref="scroll" :probeType="3" @scroll="contentScroll">
         <detail-swiper :top-images="topImages"></detail-swiper>
         <detail-base-info :goods="goods"></detail-base-info>
         <detail-shop :shop="shop"></detail-shop>
@@ -26,7 +26,7 @@
     import GoodsList from "components/content/goods/GoodsList";
     import Scroll from "components/common/scroll/Scroll";
     import { itemListenerMixin} from "common/mixin";
-    import {debounce} from "../../common/utils";
+    //import {debounce} from "../../common/utils";
 
     export default {
         name: "Detail",
@@ -58,6 +58,7 @@
                 tops:[],
                 //newRefresh: null,
                 getTops: null,
+                currentIndex: 0,
 
             }
         },
@@ -89,14 +90,6 @@
                 this.recommends = res.data.list
             });
             //详情页图片加载完监听
-            this.getTops = debounce(() => {
-                this.tops = [];
-                this.tops.push(0);
-                this.tops.push(this.$refs.params.$el.offsetTop);
-                this.tops.push(this.$refs.comments.$el.offsetTop);
-                this.tops.push(this.$refs.recommend.$el.offsetTop);
-                console.log(this.tops);
-            },100)
         },
         destroyed() {
             //取消全局事件监听
@@ -104,18 +97,34 @@
         },
         methods: {
             imgLoad() {
-                console.log("---");
+                //console.log("---");
                 this.$refs.scroll.refresh();
                 //his.newRefresh();
-                this.$nextTick(() => {
-                    this.getTops()
-                });
+                this.tops = [];
+                this.tops.push(0);
+                this.tops.push(this.$refs.params.$el.offsetTop);
+                this.tops.push(this.$refs.comments.$el.offsetTop);
+                this.tops.push(this.$refs.recommend.$el.offsetTop);
+                this.tops.push(Number.MAX_VALUE);
+                //console.log(this.tops);
 
             },
             titleClick(index){
                 this.$refs.scroll.scroll.scrollTo(0,44-this.tops[index],500)
             },
-        },
+            contentScroll(position) {
+                const positionY = -position.y;
+                let length = this.tops.length;
+                for (let i = 0; i < length-1; i++) {
+                    if ((this.currentIndex !== i) && (positionY >= this.tops[i]-44 && positionY < this.tops[i + 1]-44)) {
+                        this.currentIndex = i;
+                        this.$refs.navIndex.currentIndex = this.currentIndex;
+                        //console.log(this.currentIndex);
+                    }
+
+                }
+            }
+        }
     }
 </script>
 
