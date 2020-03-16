@@ -10,6 +10,7 @@
         <detail-comment :comment="comment" ref="comments" ></detail-comment>
         <goods-list :goods ="recommends" ref="recommend"></goods-list>
         </scroll>
+        <detail-bottom-bar> </detail-bottom-bar>
     </div>
 </template>
 
@@ -26,6 +27,7 @@
     import GoodsList from "components/content/goods/GoodsList";
     import Scroll from "components/common/scroll/Scroll";
     import { itemListenerMixin} from "common/mixin";
+    import DetailBottomBar from "./childComponent/DetailBottomBar";
     //import {debounce} from "../../common/utils";
 
     export default {
@@ -42,7 +44,8 @@
             DetailItemParams,
             DetailComment,
             Scroll,
-            GoodsList
+            GoodsList,
+            DetailBottomBar,
         },
         mixins: [itemListenerMixin],
         data() {
