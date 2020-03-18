@@ -31,12 +31,12 @@
 
   import tabControl from "components/content/tabcontrol/tabControl";
   import GoodsList from "components/content/goods/GoodsList";
-  import backTop from "components/content/backtop/backTop";
+
 //import GoodsList from "../../components/content/goods/GoodsList";
 
   import {getHomeMultidata, getHomeGoods} from "network/home";
   import Scroll from "components/common/scroll/Scroll";
-  import {itemListenerMixin} from "common/mixin";
+  import {itemListenerMixin,backTopMixin} from "common/mixin";
 
   export default {
     name: "Home",
@@ -48,9 +48,8 @@
       tabControl,
       GoodsList,
       Scroll,
-      backTop
     },
-    mixins:[itemListenerMixin],
+    mixins:[itemListenerMixin,backTopMixin],
     data() {
       return {
         banners: [],
@@ -72,7 +71,6 @@
           },
           },
         selectType:'pop',
-        isShow: false,
         tabOffsetTop: 0,
         isTabControlfixed: false,
         saveY:0,
@@ -146,12 +144,7 @@
         this.$refs.copyTabControl.currentIndex = index;
         this.$refs.tabControl.currentIndex = index;
       },
-      /*
-      * 返回顶端事件
-      * */
-      backClick() {
-        this.$refs.scroll.scroll.scrollTo(0,0,900)
-      },
+
       /*
       * 判断返回顶端按钮的显示隐藏
       * */
@@ -161,8 +154,6 @@
         this.isShow = position.y < (-1000);
         //controlbar是否吸顶
         this.isTabControlfixed = (-position.y) >= this.tabOffsetTop
-
-
       },
       /*
       * 上拉加载更多

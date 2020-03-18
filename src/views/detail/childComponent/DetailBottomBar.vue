@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="bar-item bar-right">
-            <div class="cart" >加入购物车</div>
+            <div class="cart" @click="addToCart" >加入购物车</div>
             <div class="buy">立即购买</div>
         </div>
     </div>
@@ -23,7 +23,12 @@
 
 <script>
     export default {
-        name: "DetailBottomBar"
+        name: "DetailBottomBar",
+        methods: {
+            addToCart() {
+                this.$emit('addCart')
+            }
+        }
     }
 </script>
 
@@ -66,19 +71,19 @@
     }
     .bar-right {
         color: #fff;
-        line-height: 58px;
+        line-height: 49px;
     }
     .bar-right .cart {
         background-image:radial-gradient(#FF8000,#FE9A2E);
         border: 1px solid #FE9A2E;
-        border-radius:35% 0 0 35% ;
+        border-radius:30% 0 0 30% ;
         font-size: 14px;
     }
     .bar-right .buy {
         //background-color: #FF4000#FA8258;
         background-image:radial-gradient(#FF4000,#FA8258);
         border: 1px solid #FA8258;
-        border-radius: 0 35% 35% 0 ;
+        border-radius: 0 30% 30% 0 ;
         font-size: 15px;
     }
 </style>

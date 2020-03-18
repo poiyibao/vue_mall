@@ -10,7 +10,8 @@
         <detail-comment :comment="comment" ref="comments" ></detail-comment>
         <goods-list :goods ="recommends" ref="recommend"></goods-list>
         </scroll>
-        <detail-bottom-bar> </detail-bottom-bar>
+        <detail-bottom-bar @addCart="addCart"> </detail-bottom-bar>
+        <back-top @click.native="backClick" v-show="isShow"></back-top>
     </div>
 </template>
 
@@ -26,7 +27,7 @@
 
     import GoodsList from "components/content/goods/GoodsList";
     import Scroll from "components/common/scroll/Scroll";
-    import { itemListenerMixin} from "common/mixin";
+    import { itemListenerMixin,backTopMixin} from "common/mixin";
     import DetailBottomBar from "./childComponent/DetailBottomBar";
     //import {debounce} from "../../common/utils";
 
@@ -47,7 +48,7 @@
             GoodsList,
             DetailBottomBar,
         },
-        mixins: [itemListenerMixin],
+        mixins: [itemListenerMixin,backTopMixin],
         data() {
             return {
                 iid: null,
@@ -116,6 +117,8 @@
                 this.$refs.scroll.scroll.scrollTo(0,44-this.tops[index],500)
             },
             contentScroll(position) {
+                //backTap是否显示
+                this.isShow = position.y < (-1000);
                 const positionY = -position.y;
                 let length = this.tops.length;
                 for (let i = 0; i < length-1; i++) {
@@ -126,6 +129,17 @@
                     }
 
                 }
+            },
+            addCart() {
+                //获取购物车展示商品信息
+                const product = {};
+                product.image = this.topImages[0];
+                product.title = this.goods.title;
+                product.price = this.goods.realPrice;
+                product.iid = this.iid;
+
+                //将商品添加入购物车
+
             }
         }
     }
