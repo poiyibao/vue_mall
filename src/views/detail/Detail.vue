@@ -139,6 +139,7 @@
                 product.iid = this.iid;
 
                 //将商品添加入购物车
+                this.$store.commit('addCart',product)
 
             }
         }
