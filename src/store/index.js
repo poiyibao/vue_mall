@@ -14,7 +14,7 @@ export default new Vuex.Store({
         if(state.cartList[i].iid === payload.iid) {
           oldProduct = state.cartList[i];
         }
-      };
+      }
       if(oldProduct) {
         oldProduct.count += 1;
       }else {
