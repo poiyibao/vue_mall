@@ -1,31 +1,51 @@
 <template>
-  <div class="cart">
-    <nav-bar  class="nav-bar">
-      <div slot="center">购物车({{cartLength}})</div>
-    </nav-bar>
+  <div id="cart">
+    <!-- 顶部导航栏 -->
+    <cart-nav-bar />
+
+    <scroll class="content" ref="scroll">
+      <!-- 商品列表 -->
+      <cart-goods-list />
+    </scroll>
+    <!-- 商品总计栏 -->
+    <cart-bottom-bar />
   </div>
 </template>
 
 <script>
-  import NavBar from "components/common/navbar/NavBar";
+  import CartNavBar from "./childrenCart/CartNavBar";
+  import CartGoodsList from "./childrenCart/CartGoodsList";
+  import CartBottomBar from "./childrenCart/CartBottomBar";
+  import scroll from "components/common/scroll/Scroll";
 
   export default {
     name: "Cart",
-    components:{
-      NavBar,
+    components: {
+      CartNavBar,
+      CartGoodsList,
+      CartBottomBar,
+      scroll
     },
-    computed: {
-      cartLength() {
-        return this.$store.state.cartList.length;
-      }
+    mounted() {},
+    //进入页面刷新，scroll内容大小
+    activated() {
+      this.$refs.scroll.refresh();
     }
-  }
+  };
 </script>
-
 <style scoped>
-  .nav-bar {
-    background-color: var(--color-tint);
-    color: #fff;
-    font-weight: 700;
+  #cart {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+  }
+
+  .content {
+    overflow: hidden;
+    position: absolute;
+    top: 44px;
+    bottom: 80px;
+    left: 0;
+    right: 0;
   }
 </style>
