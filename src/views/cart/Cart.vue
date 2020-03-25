@@ -47,5 +47,6 @@
     bottom: 80px;
     left: 0;
     right: 0;
+    background-color: #E6E6E6;
   }
 </style>

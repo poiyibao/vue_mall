@@ -139,12 +139,10 @@
                 product.iid = this.iid;
                 //console.log("----");
                 //将商品添加入购物车
-                /*this.$store.dispatch("addCart", product).then(res => {
+
+                this.$store.dispatch("addCart", product).then(res => {
                     this.$toast.show(res, 2000);
                 });
-
-                 */
-                this.$store.commit('addCart',product)
 
             }
         }

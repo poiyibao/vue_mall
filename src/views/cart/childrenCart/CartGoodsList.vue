@@ -24,6 +24,6 @@ export default {
 <style scoped>
 .goods-list {
   /* padding: 0 10px; */
-  background: #f7f7f7;
+  background: #E6E6E6;
 }
 </style>
