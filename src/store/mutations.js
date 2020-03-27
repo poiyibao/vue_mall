@@ -7,7 +7,7 @@ export default {
     },
     //添加商品（vue-devtools监听）
     addToCart(state, payload) {
-        payload.checked = true
+        payload.checked = true;
         state.cartList.push(payload)
     },
     //删除商品（vue-devtools监听）

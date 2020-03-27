@@ -19,6 +19,9 @@ export default {
       list: "cartGoodsList"
     })
   },
+  activated() {
+    this.$refs.scroll.refresh()
+  }
 };
 </script>
 <style scoped>
