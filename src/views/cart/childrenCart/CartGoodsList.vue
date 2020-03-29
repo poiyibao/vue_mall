@@ -18,9 +18,6 @@ export default {
     ...mapGetters({
       list: "cartGoodsList"
     })
-  },
-  activated() {
-    this.$refs.scroll.refresh()
   }
 };
 </script>

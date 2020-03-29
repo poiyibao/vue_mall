@@ -110,7 +110,7 @@ export default {
   font-size: 14px;
   font-weight: bolder;
   width: 100%;
-  height: 45px;
+  height: 40px;
   display: -webkit-box;
   -webkit-line-clamp:2;
   -webkit-box-orient: vertical;
@@ -123,8 +123,8 @@ export default {
   }
   .count {
     position: relative;
-    width: 80px;
-    right: calc(80px - 100%);
+    width: 100px;
+    right: calc(100px - 100%);
   }
   .count span {
     margin: 0 10px;
