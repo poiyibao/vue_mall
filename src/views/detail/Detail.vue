@@ -12,6 +12,7 @@
         </scroll>
         <detail-bottom-bar @addCart="addCart"> </detail-bottom-bar>
         <back-top @click.native="backClick" v-show="isShow"></back-top>
+        <!--<tosat :message="hahaha" :isshow></tosat>-->
     </div>
 </template>
 
@@ -27,6 +28,7 @@
 
     import GoodsList from "components/content/goods/GoodsList";
     import Scroll from "components/common/scroll/Scroll";
+    //import toast from "components/common/toast/toast";
     import { itemListenerMixin,backTopMixin} from "common/mixin";
     import DetailBottomBar from "./childComponent/DetailBottomBar";
     //import {debounce} from "../../common/utils";
@@ -47,6 +49,7 @@
             Scroll,
             GoodsList,
             DetailBottomBar,
+            //toast
         },
         mixins: [itemListenerMixin,backTopMixin],
         data() {
@@ -141,7 +144,7 @@
                 //将商品添加入购物车
 
                 this.$store.dispatch("addCart", product).then(res => {
-                    this.$toast.show(res, 2000);
+                    this.$toast.show(res, 1000);
                 });
 
             }
