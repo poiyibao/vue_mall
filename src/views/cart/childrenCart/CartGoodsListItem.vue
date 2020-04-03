@@ -8,7 +8,7 @@
               class="left"
       />
       <div class="img">
-        <img :src="listItem.image" alt="">
+        <img v-lazy="listItem.image" alt="">
       </div>
       <div class="content">
         <div class="info">
