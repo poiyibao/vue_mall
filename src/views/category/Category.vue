@@ -3,15 +3,15 @@
     <nav-bar class="home-nav">
       <div slot="center">分类</div>
     </nav-bar>
-    <Scroll class="content" ref="scroll" :probeType="3">
-      <left-bar :left-bar="categoryList"></left-bar>
-      <right-content></right-content>
-    </Scroll>
+    <div class="detail">
+      <left-bar :left-bar="categoryList" @barClick="barClick"></left-bar>
+      <right-content :item-list="subcategoryList[currentIndex]"></right-content>
+    </div>
   </div>
 </template>
 
 <script>
-  import Scroll from "components/common/scroll/Scroll";
+
   import {
     getCategory,
     getSubcategory,
@@ -24,7 +24,7 @@
     name: "Category",
     components: {
       NavBar,
-      Scroll,
+
       leftBar,
       rightContent,
     },
@@ -32,7 +32,7 @@
       return {
         categoryList:[],
         subcategoryList: [],
-
+        currentIndex:0,
 
       }
 
@@ -62,10 +62,29 @@
           this.subcategoryList[index] = res.data.list;
         });
       },
+      //左边点击事件的传出
+      barClick(index) {
+        //左边点击所对应的index保存起来
+        this.currentIndex = index;
+        //请求对应的右边数据
+        this.getSubcategory(this.categoryList[index].maitKey, index);
+        //右侧展示区域Y值回归为0
+        //this.$refs.scroll.scroll.scrollTo(0, 0, 0);
+      }
       },
   }
 </script>
 
 <style scoped>
+  .category {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+  }
 
+  .detail {
+    display: flex;
+    width: 100%;
+    height:calc(100% - 49px - 44px);
+  }
 </style>
