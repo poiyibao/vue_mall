@@ -5,13 +5,15 @@
     </nav-bar>
     <div class="detail">
       <left-bar :left-bar="categoryList" @barClick="barClick"></left-bar>
-      <right-content :item-list="subcategoryList[currentIndex]"></right-content>
+      <Scroll class="content" ref="scroll" :probeType="3">
+        <right-content :item-list="subcategoryList[currentIndex]"></right-content>
+      </Scroll>
     </div>
   </div>
 </template>
 
 <script>
-
+  import Scroll from "components/common/scroll/Scroll";
   import {
     getCategory,
     getSubcategory,
@@ -24,7 +26,7 @@
     name: "Category",
     components: {
       NavBar,
-
+      Scroll,
       leftBar,
       rightContent,
     },
@@ -32,7 +34,7 @@
       return {
         categoryList:[],
         subcategoryList: [],
-        currentIndex:0,
+        currentIndex: 0,
 
       }
 
@@ -58,8 +60,8 @@
         },
       getSubcategory(key, index) {
         getSubcategory(key).then(res => {
-           console.log(this.subcategoryList);
           this.subcategoryList[index] = res.data.list;
+          console.log(this.subcategoryList);
         });
       },
       //左边点击事件的传出
@@ -67,9 +69,10 @@
         //左边点击所对应的index保存起来
         this.currentIndex = index;
         //请求对应的右边数据
-        this.getSubcategory(this.categoryList[index].maitKey, index);
+        this.getSubcategory(this.categoryList[this.currentIndex].maitKey, index);
         //右侧展示区域Y值回归为0
-        //this.$refs.scroll.scroll.scrollTo(0, 0, 0);
+        this.$refs.scroll.scroll.scrollTo(0, 0, 0);
+       //this.$refs.scroll.refresh()
       }
       },
   }
@@ -81,10 +84,24 @@
     height: 100%;
     position: fixed;
   }
-
+  .home-nav {
+    //z-index: 999;
+    background-color: var(--color-tint);
+    color: #fff;
+  }
   .detail {
     display: flex;
     width: 100%;
     height:calc(100% - 49px - 44px);
+  }
+  .content {
+    position: fixed;
+    right: 0;
+    height: calc(100% - 49px - 44px);;
+    width: calc(100% - 120px);
+    left: 120px;
+    overflow: hidden;
+    bottom: 49px;
+    top: 44px;
   }
 </style>

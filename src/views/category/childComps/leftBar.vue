@@ -50,12 +50,13 @@
         height:100%;
     }
     .content {
-    //height: 300px;
         overflow: hidden;
-        //position: relative;
-        height: 100%;
+        position: fixed;
+        height: calc(100% - 49px - 44px);
         right: 0;
         left: 0;
+        top: 44px;
+        bottom: 49px;
     }
     .item-list {
         list-style-type: none;
